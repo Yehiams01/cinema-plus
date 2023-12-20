@@ -76,7 +76,7 @@ function DiscoverResults( {discoverResults, answers} ) {
                     {contents.map((content) => (
                         <div className="swiper-slide"  key={content.id} onMouseEnter={() => handleHover(content)}>
                         <swiper-slide> 
-                            <Link className='link-class' to={`/${answers.type === 'movie' ? 'movie-details' : 'show-details'}?id=${content.id}`}>
+                            <Link className='link-class' to={`/${answers.type === 'movie' ? 'movie-details' : 'tv-details'}?id=${content.id}`}>
                                 {content.backdrop_path ? 
                                     <img 
                                         src={`https://image.tmdb.org/t/p/original/${content.backdrop_path}`} 
