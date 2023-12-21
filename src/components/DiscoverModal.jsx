@@ -209,7 +209,7 @@ useEffect(() => {
             )}
             </>
         ) : 
-             <DiscoverResults discoverResults={discoverResults} answers={answers} /> 
+             <DiscoverResults discoverResults={discoverResults} answers={answers} handleCloseModal={handleCloseModal}  /> 
         }
         
         </Modal>

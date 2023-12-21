@@ -1,14 +1,16 @@
 import React, { useState, useContext, useEffect, useRef } from 'react';
 import TMDBContext from "../context/TMDBContext/TMDBContext";
 import 'swiper/css';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import NoBackdropPathImage from '../assets/noimage-still_path.jpg';
 import { register } from 'swiper/element/bundle';
 
 register();
 
-function DiscoverResults( {discoverResults, answers} ) {
+function DiscoverResults( {discoverResults, answers, handleCloseModal} ) {
+    
     const swiperElRef = useRef(null);
+    const navigate = useNavigate();
     const { fetchContentImages, contentImages } = useContext(TMDBContext);
     const [contents, setContents] = useState([]);
     const [selectedContent, setSelectedContent] = useState(null);
@@ -47,7 +49,12 @@ function DiscoverResults( {discoverResults, answers} ) {
         setModalBackground(content.backdrop_path);
     };
 
-    const type = 'movie';
+    const navigateToContent = (answers, content) => {
+        handleCloseModal();
+        const path = `/${answers.type === 'movie' ? 'movie-details' : 'tv-details'}?id=${content.id}`;
+        navigate(path);
+      };
+
     console.log(selectedContent)
 
     return (
@@ -76,26 +83,26 @@ function DiscoverResults( {discoverResults, answers} ) {
                     {contents.map((content) => (
                         <div className="swiper-slide"  key={content.id} onMouseEnter={() => handleHover(content)}>
                         <swiper-slide> 
-                            <Link className='link-class' to={`/${answers.type === 'movie' ? 'movie-details' : 'tv-details'}?id=${content.id}`}>
+                            <div className='link-class' onClick={() => navigateToContent(answers, content)}>
                                 {content.backdrop_path ? 
                                     <img 
                                         src={`https://image.tmdb.org/t/p/original/${content.backdrop_path}`} 
-                                        alt={type === 'content' ? content.title : content.name}
+                                        alt={answers.type === 'movie' ? content.title : content.name}
                                         className="swiper-slide-img" 
                                     /> :
                                     <img 
                                         src={NoBackdropPathImage} 
-                                        alt={type === 'content' ? content.title : content.name}
+                                        alt={answers.type === 'content' ? content.title : content.name}
                                         className="swiper-slide-img" 
                                     />
                                 }
                                 <h4 className="title">
-                                    {type === 'content' ? content.title : content.name}
+                                    {answers.type === 'content' ? content.title : content.name}
                                 </h4>
                                 <h4 className="swiper-genre">
                                     <i className="fas fa-star text-secondary"></i> {content.vote_average.toFixed(1)} / 10
                                 </h4>
-                            </Link>
+                            </div>
                         </swiper-slide>
                         </div>
                     ))}
